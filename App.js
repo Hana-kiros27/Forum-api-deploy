@@ -8,7 +8,7 @@ const port = 2000;
 // Middleware
 app.use(cors()); // Enable CORS for frontend (development only)
 app.use(express.json()); // Single JSON body parser (remove body-parser)
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (if needed)
+app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded bodies (if needed nested object)
 
 // Routes
 const installRoutes = require("./routes/installRoute");
@@ -17,7 +17,7 @@ app.use("/", installRoutes);
 const userRoutes = require("./routes/userRoute");
 app.use("/api/users", userRoutes);
 
-const questionRoutes = require("./Routes/questionRoute");
+const questionRoutes = require("./routes/questionRoute");
 const answerRoutes = require("./routes/answerRoute");
 const authMiddleware = require("./middleware/authMiddleware");
 app.use("/api", authMiddleware, questionRoutes);

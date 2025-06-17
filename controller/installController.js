@@ -1,8 +1,9 @@
 // updated
 
 const dbConnection = require("../db/dbconfig");
+
 async function install(req, res) {
-  
+
   let createuser = `CREATE TABLE if not exists users(
     userid int(20) not null auto_increment,
     username varchar(20) not null,

@@ -104,7 +104,7 @@ async function login(req, res) {
   }
 }
 function checkuser(req, res) {
-  //Assignee: Habte and bekalu 10/04/2024
+
   const username = req.user.username;
   const userid = req.user.userid;
   return res
