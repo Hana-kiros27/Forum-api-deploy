@@ -1,6 +1,6 @@
 // updated
 
-const dbConnection = require("../db/dbconfig.js");
+const dbConnection = require("../db/dbConfig");
 
 async function install(req, res) {
 

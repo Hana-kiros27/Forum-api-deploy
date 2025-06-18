@@ -5,7 +5,7 @@ const {
   NOT_FOUND,
   OK,
 } = require("http-status-codes");
-const dbConnection = require("../db/dbconfig");
+const dbConnection = require("../db/dbConfig");
 const { json, query } = require("express");
 
 async function postAnswer(req, res) {

@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 // Database connection
-const dbConnection = require("./db/dbconfig.js");
+const dbConnection = require("./db/dbConfig");
 
 async function start() {
   try {

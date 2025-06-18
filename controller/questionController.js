@@ -107,7 +107,7 @@
 
 // module.exports = { question, Allquestion, getSingleQuestion };
 
-const dbConnection = require("../db/dbconfig");
+const dbConnection = require("../db/dbConfig");
 
 const { StatusCodes } = require("http-status-codes");
 const { v4: uuidv4 } = require("uuid");
