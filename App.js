@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-const port = 2000;
+const port = process.env.PORT;
 
 // Middleware
 app.use(cors()); // Enable CORS for frontend (development only)
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 });
 
 // Database connection
-const dbConnection = require("./db/dbconfig");
+const dbConnection = require("./db/dbconfig.js");
 
 async function start() {
   try {

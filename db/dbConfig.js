@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 //multiple simeltaneous connection/ create connection pool /reuse/cach
 const dbConnection = mysql2.createPool({
+  port:process.env.PORT,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
