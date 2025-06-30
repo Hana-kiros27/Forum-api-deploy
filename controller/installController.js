@@ -35,6 +35,7 @@ async function install(req, res) {
     FOREIGN KEY (userid) REFERENCES users(userid)
     
 )`;
+
   try {
     await dbConnection.query(createuser);
     await dbConnection.query(createquestions);
@@ -44,6 +45,8 @@ async function install(req, res) {
     console.log(error.message);
     return res.status(500).json({ msg: "someting went wrong,try again later" });
   }
+
 }
+
 
 module.exports = { install };

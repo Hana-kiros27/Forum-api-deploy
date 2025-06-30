@@ -230,4 +230,111 @@ async function getSingleQuestion(req, res) {
   }
 }
 
-module.exports = { question, Allquestion, getSingleQuestion };
+async function editQuestion(req, res) {
+  const { question_id } = req.params;
+  const { title, description } = req.body;
+
+  if (!title || !description) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Please provide all required information" });
+  }
+
+  if (title.length > 50) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Title must be less than 50 characters" });
+  }
+
+  if (description.length > 200) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Description must be less than 200 characters" });
+  }
+
+  try {
+    const [existingQuestion] = await dbConnection.query(
+      "SELECT * FROM questions WHERE questionid = ?",
+      [question_id]
+    );
+
+    if (existingQuestion.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "No question found with this ID." });
+    }
+
+    const userid = req.user.userid; // from auth middleware
+    if (existingQuestion[0].userid !== userid) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ msg: "You do not have permission to edit this question." });
+    }
+
+    await dbConnection.query(
+      "UPDATE questions SET title = ?, description = ? WHERE questionid = ?",
+      [title, description, question_id]
+    );
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "Question updated successfully." });
+  } catch (error) {
+    console.error("Error while editing question:", error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Something went wrong, please try again!" });
+  }
+}
+async function deleteQuestion(req, res) {
+  const { question_id } = req.params;
+
+  try {
+    // Check if the question exists
+    const [existingQuestion] = await dbConnection.query(
+      "SELECT * FROM questions WHERE questionid = ?",
+      [question_id]
+    );
+
+    if (existingQuestion.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ msg: "No question found with this ID." });
+    }
+
+    const userid = req.user.userid; // from auth middleware
+    if (existingQuestion[0].userid !== userid) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ msg: "You do not have permission to delete this question." });
+    }
+
+    // Delete answers associated with the question
+    await dbConnection.query("DELETE FROM answers WHERE questionid = ?", [
+      question_id,
+    ]);
+
+    // Now delete the question
+    await dbConnection.query("DELETE FROM questions WHERE questionid = ?", [
+      question_id,
+    ]);
+
+    return res
+      .status(StatusCodes.NO_CONTENT)
+      .json({ msg: "Question and associated answers deleted successfully." });
+  } catch (error) {
+    console.error("Error while deleting question:", error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Something went wrong, please try again!" });
+  }
+}
+
+
+module.exports = {
+  deleteQuestion,
+  editQuestion,
+  question,
+  Allquestion,
+  getSingleQuestion,
+};

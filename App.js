@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-const port = process.env.PORT;
+const port =2000;
 
 // Middleware
 app.use(cors()); // Enable CORS for frontend (development only)
