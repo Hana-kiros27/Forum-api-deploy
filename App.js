@@ -2,7 +2,7 @@ const mysql2 = require("mysql2");
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const port =10000;
+const port =3306;
 const { StatusCodes } = require("http-status-codes");
 const server = require("http").createServer(app);
 // Middleware
