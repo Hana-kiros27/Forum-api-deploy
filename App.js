@@ -2,9 +2,9 @@ const mysql2 = require("mysql2");
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
 const port =10000;
-
+const { StatusCodes } = require("http-status-codes");
+const server = require("http").createServer(app);
 // Middleware
 app.use(cors()); // Enable CORS for frontend (development only)
 app.use(express.json()); // Single JSON body parser (remove body-parser)
@@ -35,50 +35,37 @@ async function start() {
   try {
     const connection = await dbConnection.getConnection();
     console.log(
-      "Database connection established at",
-      new Date().toLocaleString("en-US", { timeZone: "Africa/Addis_Ababa" })
-    );
+      "Database connection established at")
     connection.release(); // Release the connection back to the pool
   } catch (error) {
     console.error(
-      "Database connection failed at",
-      new Date().toLocaleString("en-US", { timeZone: "Africa/Addis_Ababa" }),
-      ":",
-      error.message
+      "Database connection failed at"
     );
     process.exit(1); // Exit if connection fails to prevent server start
   }
+  
 }
 
 // Start server after database connection
 start()
   .then(() => {
-    app.listen(port, (error) => {
+    app.listen(port,'0.0.0.0', (error) => {
       if (error) {
         console.error(
-          "Server start failed at",
-          new Date().toLocaleString("en-US", {
-            timeZone: "Africa/Addis_Ababa",
-          }),
-          ":",
-          error.message
+          "Server start failed at"
         );
       } else {
         console.log(
           "Server listening on port",
-          port,
-          "at",
-          new Date().toLocaleString("en-US", { timeZone: "Africa/Addis_Ababa" })
+          port
         );
       }
     });
   })
   .catch((error) => {
     console.error(
-      "Start function error at",
-      new Date().toLocaleString("en-US", { timeZone: "Africa/Addis_Ababa" }),
-      ":",
-      error.message
+      "Start function error at"
+   
     );
     process.exit(1);
   });
@@ -86,10 +73,8 @@ start()
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(
-    "Global error handler at",
-    new Date().toLocaleString("en-US", { timeZone: "Africa/Addis_Ababa" }),
-    ":",
-    err
+    "Global error handler at"
+ 
   );
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     message: "An unexpected error occurred.",

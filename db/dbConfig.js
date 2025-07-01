@@ -1,7 +1,12 @@
 const mysql2 = require("mysql2");
+const express = require("express");
+const app = express();
+// const mysql2 = require("mysql2");
 
+const cors = require("cors");
+// const app = express();
 const dotenv = require("dotenv");
-
+const server = require("http").createServer(app);
 dotenv.config();
 //multiple simeltaneous connection/ create connection pool /reuse/cach
 const dbConnection = mysql2.createPool({
@@ -10,11 +15,13 @@ const dbConnection = mysql2.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  connectionLimit: process.env.DB_CONNECTION_LIMIT, // Optional: Set a reasonable mAX limit
+  connectionLimit: process.env.DB_CONNECTION_LIMIT || 10, // Optional: Set a reasonable mAX limit
   waitForConnections: true, // Optional: Wait for available connections
+
   queueLimit: 0, // Optional: No limit on queue requset size
 });
-
+server.keepAliveTimeout = 120000; // 2 minutes
+server.headersTimeout = 120000; // 2 minutes
 //connection from the pool
 dbConnection.getConnection((err, connection) => {
   if (err) {
