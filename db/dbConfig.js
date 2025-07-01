@@ -16,6 +16,7 @@ const dbConnection = mysql2.createPool({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   connectionLimit: process.env.DB_CONNECTION_LIMIT || 10, // Optional: Set a reasonable mAX limit
+  connectTimeout: 30000,
   waitForConnections: true, // Optional: Wait for available connections
 
   queueLimit: 0, // Optional: No limit on queue requset size
